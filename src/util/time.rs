@@ -1,0 +1,64 @@
+pub mod serde;
+
+use std::time::Duration;
+
+use ::serde::{Deserialize, Serialize};
+use jiff::{Timestamp, Zoned, civil::Time, tz::TimeZone};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize, Serialize)]
+#[repr(transparent)]
+pub struct UnixTimestampSecs(i64);
+
+impl UnixTimestampSecs {
+    pub fn new(secs: i64) -> Self {
+        Self(secs)
+    }
+
+    pub fn as_i64(self) -> i64 {
+        self.0
+    }
+
+    pub fn now() -> Self {
+        Self::new(Timestamp::now().as_second())
+    }
+
+    pub fn from_str_iso8601(time_str: &str) -> anyhow::Result<Self> {
+        let t = Timestamp::strptime("%FT%T%:z", time_str.replace("Z", "+00:00"))?;
+        Ok(Self::new(t.as_second()))
+    }
+
+    pub fn into_str_iso8601(self) -> anyhow::Result<String> {
+        let t = Timestamp::from_second(self.as_i64())?;
+        Ok(t.strftime("%FT%TZ").to_string())
+    }
+
+    pub fn to_date_utc(self) -> anyhow::Result<Self> {
+        self.to_date(TimeZone::UTC)
+    }
+
+    pub fn to_date(self, time_zone: TimeZone) -> anyhow::Result<Self> {
+        let timestamp = Timestamp::from_second(self.as_i64())?;
+        Zoned::new(timestamp, time_zone.clone())
+            .date()
+            .to_datetime(Time::midnight())
+            .to_zoned(time_zone)
+            .map(|zoned| Self::new(zoned.timestamp().as_second()))
+            .map_err(From::from)
+    }
+
+    pub fn checked_add(self, duration: Duration) -> Option<Self> {
+        self.0.checked_add_unsigned(duration.as_secs()).map(Self)
+    }
+
+    pub fn checked_sub(self, duration: Duration) -> Option<Self> {
+        self.0.checked_sub_unsigned(duration.as_secs()).map(Self)
+    }
+
+    pub fn add(self, duration: Duration) -> Self {
+        Self(self.0.saturating_add_unsigned(duration.as_secs()))
+    }
+
+    pub fn sub(self, duration: Duration) -> Self {
+        Self(self.0.saturating_add_unsigned(duration.as_secs()))
+    }
+}

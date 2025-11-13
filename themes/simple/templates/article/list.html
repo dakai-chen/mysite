@@ -1,0 +1,76 @@
+{% extends "base/base_admin.html" %}
+
+{% block breadcrumb %}
+<li><a href="/">首页</a></li>
+<li><span>文章</span></li>
+{% endblock breadcrumb %}
+
+{% block admin_menu %}
+<li><a href="/articles/_create">新建</a></li>
+{% endblock admin_menu %}
+
+{% block main %}
+<!-- 搜索栏 -->
+<form class="form" action="/articles" method="GET">
+    <div class="form-input-group">
+        <input type="text" name="q" value="{% if context.search.q %}{{ context.search.q }}{% endif %}">
+        <button type="submit">搜索</button>
+    </div>
+</form>
+<!-- 文章列表 -->
+<ul class="article-list">
+    {% for article in context.items %}
+    <li>
+        {% if article.need_password %}
+        <img class="article-lock" src="/theme-assets/image/lock.svg" alt="锁">
+        {% endif %}
+        {% if article.status == "published" %}
+        <a class="article-title" href="/articles/{{ article.article_id }}">{{ article.title }}</a>
+        {% else %}
+        <a class="article-title a-article-hide" href="/articles/{{ article.article_id }}">{{ article.title }}</a>
+        {% endif %}
+        {% if article.published_at %}
+        <span class="article-timestamp">
+            {{ article.published_at | date(format="%Y-%m-%d", timezone="Asia/Shanghai") }}
+        </span>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+<!-- 分页导航栏 -->
+<nav class="pagination">
+    <ul>
+        <!-- 首页 -->
+        <li><a href="javascript:void(0)" data-p="{{ context.page_navigation.head }}">{{ "首页" }}</a>
+        </li>
+        <!-- 上一页 -->
+        {% if context.page_navigation.prev %}
+        <li><a href="javascript:void(0)" data-p="{{ context.page_navigation.prev }}">{{ "上一页" }}</a>
+        </li>
+        {% else %}
+        <li><a class="disabled" href="javascript:void(0)">{{ "上一页" }}</a>
+        </li>
+        {% endif %}
+        <!-- 页码 -->
+        {% for n in context.page_navigation.list %}
+        {% if context.page_navigation.current_page == n %}
+        <li><a class="active" href="javascript:void(0)" data-p="{{ n }}">{{ n }}</a></li>
+        {% else %}
+        <li><a href="javascript:void(0)" data-p="{{ n }}">{{ n }}</a></li>
+        {% endif %}
+        {% endfor %}
+        <!-- 下一页 -->
+        {% if context.page_navigation.next %}
+        <li><a href="javascript:void(0)" data-p="{{ context.page_navigation.next }}">{{ "下一页" }}</a></li>
+        {% else %}
+        <li><a class="disabled" href="javascript:void(0)">{{ "下一页" }}</a></li>
+        {% endif %}
+        <!-- 尾页 -->
+        {% if context.page_navigation.tail %}
+        <li><a href="javascript:void(0)" data-p="{{ context.page_navigation.tail }}">{{ "尾页" }}</a></li>
+        {% else %}
+        <li><a class="disabled" href="javascript:void(0)">{{ "尾页" }}</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock main %}

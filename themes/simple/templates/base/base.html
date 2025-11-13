@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if config.theme.extensions.favicon is defined %}
+    <link rel="icon" href="{{ config.theme.extensions.favicon }}">
+    {% else %}
+    <link rel="icon" href="/theme-assets/image/favicon.ico">
+    {% endif %}
+    {% if config.theme.extensions.title is defined %}
+    <title>{% block title %}{{ config.theme.extensions.title }}{% endblock title %}</title>
+    {% else %}
+    <title>{% block title %}{{ "个人博客" }}{% endblock title %}</title>
+    {% endif %}
+    <!-- 样式 -->
+    <link href="/theme-assets/styles/blog-var.css" rel="stylesheet">
+    <link href="/theme-assets/styles/blog-font.css" rel="stylesheet">
+    <link href="/theme-assets/styles/blog.css" rel="stylesheet">
+    <link href="/theme-assets/styles/blog-markdown.css" rel="stylesheet">
+    {% block styles %}{% endblock styles %}
+</head>
+
+<body>
+    <div class="container">
+        <!-- 顶部 -->
+        <header>
+            <!-- LOGO -->
+            <div class="logo">
+                {% if config.theme.extensions.title is defined %}
+                <h1>{{ config.theme.extensions.title }}</h1>
+                {% else %}
+                <h1>{{ "个人博客" }}</h1>
+                {% endif %}
+            </div>
+            <!-- 工具栏 -->
+            <div class="toolbar">
+                <!-- 面包屑导航栏 -->
+                <nav class="breadcrumb">
+                    <ol>
+                        {% block breadcrumb %}{% endblock breadcrumb %}
+                    </ol>
+                </nav>
+                <!-- 菜单 -->
+                <ul class="menu">
+                    {% block menu %}{% endblock menu %}
+                </ul>
+            </div>
+        </header>
+        <!-- 主体 -->
+        <main>
+            {% block main %}{% endblock main %}
+        </main>
+        <!-- 底部 -->
+        <footer>
+            {% block footer %}{% endblock footer %}
+        </footer>
+        <!-- 消息提示框 -->
+        <div class="tips"></div>
+    </div>
+    <!-- 脚本 -->
+    <script src="/theme-assets/scripts/blog-util.js"></script>
+    <script src="/theme-assets/scripts/blog-api.js"></script>
+    <script src="/theme-assets/scripts/blog-tips.js"></script>
+    <script src="/theme-assets/scripts/blog-modal.js"></script>
+    <script src="/theme-assets/scripts/blog-pagination.js"></script>
+    <script src="/theme-assets/scripts/blog-upload.js"></script>
+    {% block scripts %}{% endblock scripts %}
+</body>
+
+</html>

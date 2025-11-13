@@ -1,0 +1,110 @@
+{% import "macros.html" as macros %}
+{% extends "base/base_admin.html" %}
+
+{% block title %}{{ context.title }}{% endblock title %}
+
+{% block breadcrumb %}
+<li><a href="/">首页</a></li>
+<li><a href="/articles">文章</a></li>
+<li><span>详情</span></li>
+{% endblock breadcrumb %}
+
+{% block admin_menu %}
+<li><a href="/articles/{{ context.article_id }}/_update">编辑</a></li>
+<li><a class="modal-open" href="javascript:void(0)" data-modal-target="#modal_upload_attachment">附件</a></li>
+<li><a class="modal-open" href="javascript:void(0)" data-modal-target="#modal_delete_article"
+        data-modal-value="{{ context.article_id }}">删除</a></li>
+{% endblock admin_menu %}
+
+{% block main %}
+<!-- 文章 -->
+<article class="article">
+    <div class="article-header">
+        <h1 class="article-title">
+            {{ context.title }}
+        </h1>
+        <div class="article-metadata">
+            {% if context.published_at %}
+            <div class="article-metadata-item">
+                <img src="/theme-assets/image/time.svg" alt="文章发布时间">
+                <span>
+                    {{ context.published_at | date(format="%Y-%m-%d %H:%M", timezone="Asia/Shanghai") }}
+                </span>
+            </div>
+            {% endif %}
+            <div class="article-metadata-item">
+                <img src="/theme-assets/image/read.svg" alt="文章浏览量">
+                <span>{{ context.uv | human_number(decimals=2) }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="article-main markdown">
+        {{ context.markdown_content | markdown_to_html | safe }}
+    </div>
+</article>
+<!-- 附件 -->
+{% if context.attachments %}
+<div class="article-attachment-list">
+    {% for attachment in context.attachments %}
+    <div class="article-attachment-item">
+        <div class="article-attachment-name">{{ attachment.name }}</div>
+        <div class="article-attachment-exts">
+            <div class="article-attachment-size">{{ attachment.size | human_size }}</div>
+            <div>
+                <span>|</span>
+                <a class="article-attachment-download-btn" download="{{ attachment.name }}"
+                    href="/articles/{{ attachment.article_id }}/attachments/{{ attachment.attachment_id }}">下载</a>
+                {% if admin %}
+                <span>|</span>
+                <a class="article-attachment-download-btn modal-open" href="javascript:void(0)"
+                    data-modal-target="#modal_delete_attachment"
+                    data-modal-value='{"article_id": "{{ attachment.article_id }}","attachment_id": "{{ attachment.attachment_id }}"}'>删除</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% if admin %}
+<!-- 模态框 - 删除文章 -->
+{{ macros::modal_delete_article(id="modal_delete_article") }}
+<!-- 模态框 - 删除附件 -->
+{{ macros::modal_delete_attachment(id="modal_delete_attachment") }}
+<!-- 模态框 - 附件上传 -->
+{{ macros::modal_upload_attachment(id="modal_upload_attachment") }}
+{% endif %}
+{% endblock main %}
+
+{% block scripts %}
+<script>
+    modal_register("#modal_delete_article", {
+        on_confirm: (_, id) => {
+            api_delete_article(`${id}`, () => { window.location.href = "/articles" });
+        }
+    });
+
+    modal_register("#modal_delete_attachment", {
+        on_confirm: (_, data) => {
+            api_delete_attachment(data, () => { window.location.reload() });
+        }
+    });
+
+    modal_upload_attachment_register("#modal_upload_attachment", (modal, name, file) => {
+        api_upload_attachment("{{ context.article_id }}", name, file, (response) => {
+            response.json().then((data) => {
+                tips_show("tips-item-success", "附件上传成功");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            });
+        });
+    });
+
+    function change_article_status(event) {
+        let id = event.target.dataset.id;
+        let status = event.target.dataset.status;
+        api_article_update_status(id, status, () => { window.location.reload() });
+    }
+</script>
+{% endblock scripts %}

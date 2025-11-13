@@ -1,0 +1,7 @@
+/target
+/http_cli
+/data
+/log
+/config/*
+!/config/default.toml
+/.env

@@ -1,0 +1,17 @@
+%YAML 1.2
+---
+name: Plain Text
+file_extensions:
+  - txt
+  - text
+scope: text.plain
+
+contexts:
+  main:
+    - match: '\n'         # Match newlines
+      scope: invalid
+    - match: '\s+'        # Match whitespace
+      scope: whitespace
+    - match: '[^ \n]+'    # Match any other character
+      scope: text
+      push: main

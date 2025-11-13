@@ -1,0 +1,148 @@
+<!-- 模态框 - 删除文章 -->
+{% macro modal_delete_article(id) %}
+<div class="modal" id="{{ id }}">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span>删除文章</span>
+        </div>
+        <div class="modal-main">
+            <span>注意：文章删除后不可恢复</span>
+        </div>
+        <div class="modal-footer">
+            <button class="close">取消</button>
+            <button class="confirm btn-danger">删除</button>
+        </div>
+    </div>
+</div>
+{% endmacro modal_delete_article %}
+
+<!-- 模态框 - 删除附件 -->
+{% macro modal_delete_attachment(id) %}
+<div class="modal" id="{{ id }}">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span>删除附件</span>
+        </div>
+        <div class="modal-main">
+            <span>注意：附件删除后不可恢复</span>
+        </div>
+        <div class="modal-footer">
+            <button class="close">取消</button>
+            <button class="confirm btn-danger">删除</button>
+        </div>
+    </div>
+</div>
+{% endmacro modal_delete_attachment %}
+
+<!-- 模态框 - 文件上传 -->
+{% macro modal_upload_file(id) %}
+<div class="modal" id="{{ id }}">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span>文件上传</span>
+        </div>
+        <div class="modal-main">
+            <div class="form">
+                <div class="form-input-group">
+                    <label>文件</label>
+                    <input type="text" name="name">
+                    <label class="btn">选择<input type="file" name="file" style="display: none;"></label>
+                </div>
+                <div class="form-input-group">
+                    <label>路径</label>
+                    <input type="text" name="path">
+                    {% set copy_fn = "upload_modal_on_copy('" ~ id ~ "')" %}
+                    <button onclick="{{ copy_fn }}">复制</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="close">取消</button>
+            <button class="confirm btn-danger">上传</button>
+        </div>
+    </div>
+</div>
+{% endmacro modal_upload_file %}
+
+<!-- 模态框 - 附件上传 -->
+{% macro modal_upload_attachment(id) %}
+<div class="modal" id="{{ id }}">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span>附件上传</span>
+        </div>
+        <div class="modal-main">
+            <div class="form">
+                <div class="form-input-group">
+                    <label>文件</label>
+                    <input type="text" name="name">
+                    <label class="btn">选择<input type="file" name="file" style="display: none;"></label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="close">取消</button>
+            <button class="confirm btn-danger">上传</button>
+        </div>
+    </div>
+</div>
+{% endmacro modal_upload_attachment %}
+
+<!-- 模态框 - 重命名标签 -->
+{% macro modal_rename_tag(id) %}
+<div class="modal" id="{{ id }}">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span>重命名标签(<span class="edit-tag-name"></span>)</span>
+        </div>
+        <div class="modal-main">
+            <div class="form">
+                <div class="form-input-group">
+                    <label>新标签名</label>
+                    <input type="text" name="new_name">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="close">取消</button>
+            <button class="confirm btn-danger">重命名</button>
+        </div>
+    </div>
+</div>
+{% endmacro modal_rename_tag %}
+
+<!-- 模态框 - 删除标签 -->
+{% macro modal_delete_tag(id) %}
+<div class="modal" id="{{ id }}">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span>删除标签(<span class="edit-tag-name"></span>)</span>
+        </div>
+        <div class="modal-main">
+            <span>注意：删除标签将同时影响所有使用该标签的文章</span>
+        </div>
+        <div class="modal-footer">
+            <button class="close">取消</button>
+            <button class="confirm btn-danger">删除</button>
+        </div>
+    </div>
+</div>
+{% endmacro modal_delete_tag %}
+
+<!-- 模态框 - 编辑标签 -->
+{% macro modal_edit_tag(id) %}
+<div class="modal" id="{{ id }}">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span>编辑标签(<span class="edit-tag-name"></span>)</span>
+        </div>
+        <div class="modal-main">
+            <a class="modal-open btn" href="javascript:void(0)" data-modal-target="#modal_rename_tag">重命名</a>
+            <a class="modal-open btn" href="javascript:void(0)" data-modal-target="#modal_delete_tag">删除</a>
+        </div>
+        <div class="modal-footer">
+            <button class="close">取消</button>
+        </div>
+    </div>
+</div>
+{% endmacro modal_edit_tag %}

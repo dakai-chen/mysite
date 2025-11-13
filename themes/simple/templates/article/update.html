@@ -1,0 +1,76 @@
+{% import "macros.html" as macros %}
+{% extends "base/base_admin.html" %}
+
+{% block breadcrumb %}
+<li><a href="/">首页</a></li>
+<li><a href="/articles">文章</a></li>
+<li><a href="/articles/{{ context.article_id }}">详情</a></li>
+<li><span>编辑</span></li>
+{% endblock breadcrumb %}
+
+{% block admin_menu %}
+<li><a class="modal-open" href="javascript:void(0)" data-modal-target="#modal_upload_file">上传</a></li>
+{% endblock admin_menu %}
+
+{% block main %}
+<!-- 文章编辑区 -->
+<form class="form" action="/articles/{{ context.article_id }}/_update" method="POST">
+    <div class="form-input-group">
+        <label>标题</label>
+        <input type="text" name="title" value="{{ context.title }}">
+    </div>
+    <div class="form-input-group">
+        <label>正文</label>
+        <textarea type="text" name="markdown_content" rows="20">{{ context.markdown_content }}</textarea>
+    </div>
+    <div class="form-input-group">
+        <label>密码</label>
+        {% if context.password %}
+        <input type="text" name="password" autocomplete="off" value="{{ context.password }}">
+        {% else %}
+        <input type="text" name="password" autocomplete="off">
+        {% endif %}
+    </div>
+    <div class="form-input-group">
+        <label>状态</label>
+        <div class="form-radio-group">
+            {% if context.status == "published" %}
+            <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_draft" value="draft">
+                <label for="radio_status_draft">草稿</label>
+            </div>
+            <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_published" value="published" checked>
+                <label for="radio_status_published">发布</label>
+            </div>
+            {% else %}
+            <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_draft" value="draft" checked>
+                <label for="radio_status_draft">草稿</label>
+            </div>
+            <div class="form-radio-group-item">
+                <input type="radio" name="status" id="radio_status_published" value="published">
+                <label for="radio_status_published">发布</label>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <button type="submit">修改</button>
+</form>
+<!-- 模态框 - 文件上传 -->
+{{ macros::modal_upload_file(id="modal_upload_file") }}
+{% endblock main %}
+
+{% block scripts %}
+<script>
+    modal_upload_file_register("#modal_upload_file", (modal, name, file) => {
+        api_upload_resource(name, file, (response) => {
+            response.json().then((data) => {
+                tips_show("tips-item-success", "文件上传成功");
+                let path_input = modal.querySelector("input[name=path]");
+                path_input.value = data.data.url;
+            });
+        });
+    });
+</script>
+{% endblock scripts %}

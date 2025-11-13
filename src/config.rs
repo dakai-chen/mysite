@@ -1,0 +1,319 @@
+use std::collections::HashMap;
+use std::time::Duration;
+use std::{net::IpAddr, sync::OnceLock};
+
+use serde::{Deserialize, Deserializer, Serialize};
+
+/// 全局应用程序配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct AppConfig {
+    /// 安全配置
+    pub security: SecurityConfig,
+    /// HTTP 服务配置
+    pub http: HttpConfig,
+    /// 日志配置
+    pub logger: LoggerConfig,
+    /// 请求体大小限制配置
+    pub body_limit: BodyLimitConfig,
+    /// 数据库配置
+    pub database: DatabaseConfig,
+    /// 资源配置
+    pub resource: ResourceConfig,
+    /// 管理员配置
+    pub admin: AdminConfig,
+    /// JWT 配置
+    pub jwt: JwtConfig,
+    /// 主题配置
+    pub theme: ThemeConfig,
+    /// 定时任务配置
+    pub cron: CronConfig,
+    /// 文章配置
+    pub article: ArticleConfig,
+}
+
+impl AppConfig {
+    pub fn from_mode(mode: &str) -> anyhow::Result<Self> {
+        Ok(config::Config::builder()
+            .add_source(config::File::with_name("config/default.toml"))
+            .add_source(config::File::with_name(&format!("config/{mode}.toml")).required(true))
+            .add_source(config::Environment::default().prefix("APP").separator("."))
+            .build()?
+            .try_deserialize()?)
+    }
+}
+
+static APP_CONFIG: OnceLock<AppConfig> = OnceLock::new();
+
+pub fn init(mode: &str) -> anyhow::Result<()> {
+    APP_CONFIG
+        .set(AppConfig::from_mode(mode)?)
+        .map_err(|_| anyhow::anyhow!("重复初始化应用程序配置"))
+}
+
+pub fn get() -> &'static AppConfig {
+    APP_CONFIG.get().expect("应用程序配置未初始化")
+}
+
+/// 安全配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct SecurityConfig {
+    /// 是否启用 Cookie 的 Secure 属性
+    pub cookie_secure: bool,
+}
+
+/// HTTP 服务配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct HttpConfig {
+    /// 服务绑定的 IP 地址
+    pub bind_ip: IpAddr,
+    /// 服务绑定的端口号
+    pub bind_port: u16,
+    /// 优雅关机的超时时间
+    #[serde(default, with = "humantime_serde")]
+    pub shutdown_timeout: Option<Duration>,
+}
+
+/// 日志配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct LoggerConfig {
+    /// 日志记录级别
+    pub level: String,
+    /// 启用日志文件输出
+    pub enable_file_output: bool,
+    /// 日志文件存储目录
+    pub file_dir: String,
+    /// 日志文件名前缀
+    pub file_prefix: String,
+    /// 日志文件最大保留数量
+    pub max_keep_files: usize,
+}
+
+/// 自定义请求体大小限制规则
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct BodyLimitRule {
+    /// 请求路径
+    pub path: String,
+    /// 请求方法
+    pub method: Option<String>,
+    /// 请求体大小限制值
+    #[serde(default, with = "crate::util::serde::human_size")]
+    pub limit: Option<u64>,
+}
+
+/// 请求体大小限制配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct BodyLimitConfig {
+    /// 默认请求体大小限制
+    #[serde(default, with = "crate::util::serde::human_size")]
+    pub default_limit: Option<u64>,
+    /// 自定义请求体大小限制规则列表
+    pub rules: Vec<BodyLimitRule>,
+}
+
+/// 数据库配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct DatabaseConfig {
+    /// 连接字符串
+    pub url: String,
+    /// 数据库迁移配置
+    pub migrations: DatabaseMigrationsConfig,
+    /// 数据库日志配置
+    pub log: DatabaseLogConfig,
+    /// 数据库连接池配置
+    pub pool: DatabasePoolConfig,
+    /// SQLite 配置
+    pub sqlite: DatabaseSqliteConfig,
+}
+
+/// SQLite 配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct DatabaseSqliteConfig {
+    /// 扩展文件目录
+    pub extensions_dir: String,
+}
+
+/// 数据库迁移配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct DatabaseMigrationsConfig {
+    /// 是否自动运行迁移
+    pub auto_migrate: bool,
+    /// 迁移脚本的扩展名
+    pub script_extension: String,
+    /// 迁移脚本存放目录
+    pub script_dir: String,
+}
+
+/// 数据库日志配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct DatabaseLogConfig {
+    /// 获取连接耗时过长时使用的日志级别
+    #[serde(default)]
+    pub acquire_slow_level: Option<String>,
+    /// 当获取连接的耗时超过此阈值时，将使用 acquire_slow_level 对应的日志级别记录
+    #[serde(default, with = "humantime_serde")]
+    pub acquire_slow_threshold: Option<Duration>,
+}
+
+/// 数据库连接池配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct DatabasePoolConfig {
+    /// 最小连接数量
+    pub min_connections: u32,
+    /// 最大连接数量
+    pub max_connections: u32,
+    /// 连接获取超时时间
+    #[serde(with = "humantime_serde")]
+    pub acquire_timeout: Duration,
+    /// 连接空闲超时时间
+    #[serde(with = "humantime_serde")]
+    pub idle_timeout: Duration,
+    /// 连接最大保持时间
+    #[serde(with = "humantime_serde")]
+    pub max_lifetime: Duration,
+}
+
+/// 资源文件配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ResourceConfig {
+    /// 上传文件的存储目录
+    pub uploads_dir: String,
+    /// 上传文件的大小限制
+    #[serde(with = "crate::util::serde::human_size")]
+    pub uploads_file_max_size: u64,
+}
+
+/// 管理员配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct AdminConfig {
+    /// TOTP 工具导入链接（OTPAuth URL格式，用于生成二维码供扫码绑定）
+    pub totp_url: String,
+    /// 会话有效期
+    #[serde(with = "humantime_serde")]
+    pub session_ttl: Duration,
+}
+
+/// JWT 配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct JwtConfig {
+    /// JWT 密钥
+    pub secret: String,
+}
+
+/// 主题配置
+#[derive(Debug, Clone, Serialize)]
+pub struct ThemeConfig {
+    /// 主题文件存储的目录路径
+    pub dir: String,
+    /// 是否启用内置的代码语法
+    pub enable_default_code_syntax: bool,
+    /// 是否启用内置的代码主题
+    pub enable_default_code_themes: bool,
+    /// 当前使用的页面主题名称
+    pub current_page_theme: String,
+    /// 当前使用的代码主题名称
+    pub current_code_theme: String,
+    /// 自定义扩展配置项
+    #[serde(default)]
+    pub extensions: HashMap<String, String>,
+    /// 当前使用的主题配置
+    #[serde(skip)]
+    current: CurrentThemeConfig,
+}
+
+impl ThemeConfig {
+    pub fn current(&self) -> &CurrentThemeConfig {
+        &self.current
+    }
+}
+
+impl<'de> Deserialize<'de> for ThemeConfig {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
+        struct TempThemeConfig {
+            dir: String,
+            enable_default_code_syntax: bool,
+            enable_default_code_themes: bool,
+            current_page_theme: String,
+            current_code_theme: String,
+            #[serde(default)]
+            extensions: HashMap<String, String>,
+        }
+        let temp = TempThemeConfig::deserialize(deserializer)?;
+        let current_theme = CurrentThemeConfig::from_theme(&temp.dir, &temp.current_page_theme);
+        Ok(ThemeConfig {
+            dir: temp.dir,
+            enable_default_code_syntax: temp.enable_default_code_syntax,
+            enable_default_code_themes: temp.enable_default_code_themes,
+            current_page_theme: temp.current_page_theme,
+            current_code_theme: temp.current_code_theme,
+            extensions: temp.extensions,
+            current: current_theme,
+        })
+    }
+}
+
+/// 当前使用的主题配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CurrentThemeConfig {
+    /// 当前主题的静态资源目录
+    pub assets_dir: String,
+    /// 当前主题的模板文件目录
+    pub templates_dir: String,
+    /// 当前主题的代码主题文件目录
+    pub code_themes_dir: String,
+    /// 当前主题的代码语法文件目录
+    pub code_syntax_dir: String,
+}
+
+impl CurrentThemeConfig {
+    pub fn from_theme(dir: &str, name: &str) -> Self {
+        let base = crate::util::path::root(dir).join(name);
+        Self {
+            assets_dir: base.clone().join("assets").into_string(),
+            templates_dir: base.clone().join("templates").into_string(),
+            code_themes_dir: base.clone().join("code/themes").into_string(),
+            code_syntax_dir: base.clone().join("code/syntax").into_string(),
+        }
+    }
+}
+
+/// 定时任务配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CronConfig {
+    /// 定时任务项配置
+    pub tasks: HashMap<String, CronTaskConfig>,
+}
+
+/// 定时任务项配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CronTaskConfig {
+    /// 启用定时任务
+    pub enabled: bool,
+    /// 日程表达式
+    pub schedule: String,
+}
+
+/// 文章配置
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ArticleConfig {
+    /// 文章访问许可有效期
+    #[serde(with = "humantime_serde")]
+    pub access_access_ttl: Duration,
+    /// 全文搜索匹配结果最大输出条目
+    pub full_text_search_limit: u64,
+    /// 文章标题最大长度限制
+    #[serde(default, with = "crate::util::serde::human_size")]
+    pub title_max_size: usize,
+    /// 文章摘要最大长度限制
+    #[serde(default, with = "crate::util::serde::human_size")]
+    pub excerpt_max_size: usize,
+    /// 文章正文最大长度限制
+    #[serde(default, with = "crate::util::serde::human_size")]
+    pub content_max_size: usize,
+    /// 作为 About 页面的文章
+    #[serde(default)]
+    pub about_article_id: Option<String>,
+}

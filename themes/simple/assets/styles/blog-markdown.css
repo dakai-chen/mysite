@@ -1,0 +1,192 @@
+.markdown>*:first-child {
+    margin-top: 0 !important;
+}
+
+.markdown>*:last-child {
+    margin-bottom: 0 !important;
+}
+
+.markdown {
+    line-height: 1.5;
+    color: var(--blog-color-text);
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+    margin: 1rem 0;
+    font-weight: bold;
+    color: #000;
+}
+
+.markdown h1 {
+    font-size: 1.5rem;
+}
+
+.markdown h2 {
+    font-size: 1.375rem;
+}
+
+.markdown h3 {
+    font-size: 1.25rem;
+}
+
+.markdown h4 {
+    font-size: 1.125rem;
+}
+
+.markdown h5 {
+    font-size: 1rem;
+}
+
+.markdown h6 {
+    font-size: 1rem;
+}
+
+.markdown p,
+.markdown blockquote,
+.markdown ul,
+.markdown ol,
+.markdown dl,
+.markdown pre,
+.markdown .table-box {
+    margin: 0.75rem 0;
+}
+
+.markdown hr {
+    margin: 1rem 0;
+    border: none;
+    border-top: var(--blog-border-size) solid black;
+}
+
+.markdown ul {
+    padding-left: 2.5rem;
+}
+
+.markdown ul>li {
+    list-style-type: disc;
+}
+
+.markdown ul ul>li {
+    list-style-type: circle;
+}
+
+.markdown ul ul ul>li {
+    list-style-type: square;
+}
+
+.markdown ol {
+    padding-left: 2.5rem;
+}
+
+.markdown ol>li {
+    list-style-type: decimal;
+}
+
+.markdown li {
+    margin: 0.375rem 0;
+}
+
+.markdown li:first-child {
+    margin-top: 0;
+}
+
+.markdown li:last-child {
+    margin-bottom: 0;
+}
+
+.markdown li p:first-of-type {
+    display: inline;
+}
+
+.markdown li>* {
+    margin: 0.375rem 0;
+}
+
+.markdown li>*:last-child {
+    margin-bottom: 0;
+}
+
+.markdown blockquote {
+    border-left: 0.25rem solid #dfe2e5;
+    padding: 0 1rem;
+    color: #777777;
+}
+
+.markdown blockquote blockquote {
+    padding-right: 0;
+}
+
+.markdown .table-box {
+    overflow-x: auto;
+}
+
+.markdown table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.markdown table tr {
+    border: 1px solid #dfe2e5;
+}
+
+.markdown thead {
+    background-color: #f8f8f8;
+}
+
+.markdown table th {
+    font-weight: bold;
+    color: #000;
+    border: 1px solid #dfe2e5;
+    padding: 0.375rem 0.75rem;
+}
+
+.markdown table td {
+    border: 1px solid #dfe2e5;
+    padding: 0.375rem 0.75rem;
+}
+
+.markdown code,
+.markdown tt {
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    padding: 0 0.25rem;
+    background-color: #dcdcdc;
+}
+
+.markdown pre code {
+    display: block;
+    padding: 0.375rem 0.75rem;
+    overflow-x: auto;
+    background-color: transparent;
+}
+
+.markdown img {
+    max-width: 100%;
+}
+
+.markdown audio {
+    max-width: 100%;
+}
+
+.markdown video {
+    max-width: 100%;
+}
+
+.markdown .spoiler {
+    color: transparent;
+    background-color: #dcdcdc;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.markdown .spoiler:hover {
+    color: var(--blog-color-text);
+    background-color: #dcdcdc;
+}
+
+.markdown dd {
+    padding: 0 1.5rem;
+}

@@ -1,0 +1,21 @@
+{% extends "base/base_admin.html" %}
+
+{% block breadcrumb %}
+<li><span>首页</span></li>
+{% endblock breadcrumb %}
+
+{% block main %}
+<!-- 欢迎图片 -->
+{% if config.theme.extensions.welcome_img is defined %}
+<img src="{{ config.theme.extensions.welcome_img }}" alt="欢迎" style="width: 100%;">
+{% else %}
+<img src="/theme-assets/image/welcome.png" alt="欢迎" style="width: 100%;">
+{% endif %}
+<!-- 模块导航 -->
+<nav class="module-nav">
+    <ul>
+        <li><a class="btn btn-light" href="/articles">文章</a></li>
+        <li><a class="btn btn-light" href="/about">关于</a></li>
+    </ul>
+</nav>
+{% endblock main %}
