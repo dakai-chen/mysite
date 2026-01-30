@@ -442,13 +442,13 @@ a.btn:active {
 .article .article-title {
     word-break: break-all;
     text-align: center;
-    font-weight: normal;
 }
 
 .article .article-metadata {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    gap: 1rem;
     align-items: center;
     margin-top: 0.5rem;
     font-size: 0.875rem;
@@ -552,7 +552,6 @@ a.btn:active {
 .article-unlock .article-title {
     word-break: break-all;
     text-align: center;
-    font-weight: normal;
 }
 
 /*******************************************************************************
