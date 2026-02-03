@@ -76,6 +76,13 @@ impl SearchArticleBo<'_> {
             .validate(1..1000, [10, 20, 30, 40, 50])
             .map_err(From::from)
     }
+
+    pub fn trim_full_text(&self) -> Option<&str> {
+        self.full_text
+            .as_deref()
+            .map(|v| v.trim())
+            .filter(|v| !v.is_empty())
+    }
 }
 
 /// 文章列表项

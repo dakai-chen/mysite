@@ -141,12 +141,7 @@ pub async fn search_article(
     let page = bo.page()?;
     let offset = page.to_offset()?;
 
-    let full_text = bo
-        .full_text
-        .as_deref()
-        .map(|v| v.trim())
-        .filter(|v| !v.is_empty());
-
+    let full_text = bo.trim_full_text();
     let params = SearchArticle {
         full_text: full_text.map(Cow::from),
         status: if admin.is_some() {
