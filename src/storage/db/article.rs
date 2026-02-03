@@ -189,6 +189,13 @@ fn search_where_conditions(
         sql_params.add(published_at_lt).anyhow()?;
         conditions.push(format!("published_at < ?"));
     }
+    if let Some(need_password) = params.need_password {
+        if need_password {
+            conditions.push(format!("password IS NOT NULL"));
+        } else {
+            conditions.push(format!("password IS NULL"));
+        }
+    }
 
     Ok(conditions)
 }

@@ -38,4 +38,6 @@ pub struct SearchArticle<'a> {
     pub published_at_ge: Option<i64>,
     /// 发布时间（小于）
     pub published_at_lt: Option<i64>,
+    /// 是否需要密码访问
+    pub need_password: Option<bool>,
 }

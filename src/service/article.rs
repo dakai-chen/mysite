@@ -141,8 +141,14 @@ pub async fn search_article(
     let page = bo.page()?;
     let offset = page.to_offset()?;
 
+    let full_text = bo
+        .full_text
+        .as_deref()
+        .map(|v| v.trim())
+        .filter(|v| !v.is_empty());
+
     let params = SearchArticle {
-        full_text: bo.full_text.as_deref().map(Cow::from),
+        full_text: full_text.map(Cow::from),
         status: if admin.is_some() {
             bo.status
         } else {
@@ -150,6 +156,11 @@ pub async fn search_article(
         },
         published_at_ge: bo.published_at_ge,
         published_at_lt: bo.published_at_lt,
+        need_password: if full_text.is_some() && admin.is_none() {
+            Some(false)
+        } else {
+            None
+        },
     };
 
     let items = crate::storage::db::article::search(&params, offset, db).await?;
