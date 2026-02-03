@@ -16,8 +16,24 @@
 <form class="form" action="/articles/{{ context.article_id }}/_unlock" method="POST">
     <div class="form-input-group">
         <label>密码</label>
-        <input type="text" name="password" autocomplete="off">
+        <input id="password-input" type="text" name="password" autocomplete="off">
     </div>
     <button type="submit">解锁文章</button>
 </form>
 {% endblock main %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1. 获取 URL 中的查询参数
+        const urlParams = new URLSearchParams(window.location.search);
+        // 2. 获取参数 'pwd' 的值
+        const passwordFromUrl = urlParams.get('pwd');
+        // 3. 如果参数存在且不为空，则填充到输入框
+        if (passwordFromUrl) {
+            const passwordInput = document.getElementById('password-input');
+            passwordInput.value = passwordFromUrl;
+        }
+    });
+</script>
+{% endblock scripts %}
