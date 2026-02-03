@@ -22,7 +22,7 @@
     {% for article in context.items %}
     <li>
         {% if article.need_password %}
-        <img class="article-lock" src="/theme-assets/image/lock.svg" alt="锁">
+        <img class="article-lock" src="/theme/assets/image/lock.svg" alt="锁">
         {% endif %}
         {% if article.status == "published" %}
         <a class="article-title" href="/articles/{{ article.article_id }}">{{ article.title }}</a>

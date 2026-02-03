@@ -7,7 +7,7 @@
     {% if config.theme.extensions.favicon is defined %}
     <link rel="icon" href="{{ config.theme.extensions.favicon }}">
     {% else %}
-    <link rel="icon" href="/theme-assets/image/favicon.ico">
+    <link rel="icon" href="/theme/assets/image/favicon.ico">
     {% endif %}
     {% if config.theme.extensions.title is defined %}
     <title>{% block title %}{{ config.theme.extensions.title }}{% endblock title %}</title>
@@ -15,10 +15,10 @@
     <title>{% block title %}{{ "个人博客" }}{% endblock title %}</title>
     {% endif %}
     <!-- 样式 -->
-    <link href="/theme-assets/styles/blog-var.css" rel="stylesheet">
-    <link href="/theme-assets/styles/blog-font.css" rel="stylesheet">
-    <link href="/theme-assets/styles/blog.css" rel="stylesheet">
-    <link href="/theme-assets/styles/blog-markdown.css" rel="stylesheet">
+    <link href="/theme/assets/styles/blog-var.css" rel="stylesheet">
+    <link href="/theme/assets/styles/blog-font.css" rel="stylesheet">
+    <link href="/theme/assets/styles/blog.css" rel="stylesheet">
+    <link href="/theme/assets/styles/blog-markdown.css" rel="stylesheet">
     {% block styles %}{% endblock styles %}
 </head>
 
@@ -60,12 +60,12 @@
         <div class="tips"></div>
     </div>
     <!-- 脚本 -->
-    <script src="/theme-assets/scripts/blog-util.js"></script>
-    <script src="/theme-assets/scripts/blog-api.js"></script>
-    <script src="/theme-assets/scripts/blog-tips.js"></script>
-    <script src="/theme-assets/scripts/blog-modal.js"></script>
-    <script src="/theme-assets/scripts/blog-pagination.js"></script>
-    <script src="/theme-assets/scripts/blog-upload.js"></script>
+    <script src="/theme/assets/scripts/blog-util.js"></script>
+    <script src="/theme/assets/scripts/blog-api.js"></script>
+    <script src="/theme/assets/scripts/blog-tips.js"></script>
+    <script src="/theme/assets/scripts/blog-modal.js"></script>
+    <script src="/theme/assets/scripts/blog-pagination.js"></script>
+    <script src="/theme/assets/scripts/blog-upload.js"></script>
     {% block scripts %}{% endblock scripts %}
 </body>
 

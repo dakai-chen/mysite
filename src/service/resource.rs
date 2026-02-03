@@ -59,9 +59,9 @@ pub async fn upload_resource_with_options(
     options: UploadResourceOptionsBo,
     db: &mut DbConn,
 ) -> Result<ResourceBo, AppError> {
-    if upload.meta.size > crate::config::get().resource.uploads_file_max_size {
+    if upload.meta.size > crate::config::get().resource.upload_file_max_size {
         return Err(AppErrorMeta::DataTooLarge {
-            limit: crate::config::get().resource.uploads_file_max_size,
+            limit: crate::config::get().resource.upload_file_max_size,
         }
         .into());
     }
@@ -168,7 +168,7 @@ where
 /// 生成文件存储路径
 fn generate_storage_path() -> String {
     let file_name = crate::util::uuid::v4();
-    crate::util::path::root(&crate::config::get().resource.uploads_dir)
+    crate::util::path::root(&crate::config::get().resource.upload_dir)
         .join(file_name.get(0..2).unwrap())
         .join(file_name.get(2..4).unwrap())
         .join(file_name)

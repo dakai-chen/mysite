@@ -26,14 +26,14 @@
         <div class="article-metadata">
             {% if context.published_at %}
             <div class="article-metadata-item">
-                <img src="/theme-assets/image/time.svg" alt="文章发布时间">
+                <img src="/theme/assets/image/time.svg" alt="文章发布时间">
                 <span>
                     {{ context.published_at | date(format="%Y-%m-%d %H:%M", timezone="Asia/Shanghai") }}
                 </span>
             </div>
             {% endif %}
             <div class="article-metadata-item">
-                <img src="/theme-assets/image/read.svg" alt="文章浏览量">
+                <img src="/theme/assets/image/read.svg" alt="文章浏览量">
                 <span>{{ context.uv | human_number(decimals=2) }}</span>
             </div>
         </div>

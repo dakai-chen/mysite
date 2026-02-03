@@ -97,9 +97,11 @@ max_lifetime = "30m"
 # ------------------------------------------------------------------------------
 [resource]
 # 上传文件的存储目录
-uploads_dir = "data/resource"
+upload_dir = "data/upload"
 # 上传文件的大小限制
-uploads_file_max_size = "200MiB"
+upload_file_max_size = "200MiB"
+# 公开文件的存储目录
+public_dir = "data/public"
 
 # ------------------------------------------------------------------------------
 # 管理员配置

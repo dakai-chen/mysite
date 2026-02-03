@@ -42,10 +42,12 @@ pub async fn build(
 }
 
 fn build_static_file() -> Router {
-    Router::new().scope(
-        "/theme-assets/{*}",
-        ServeDir::new(&crate::config::get().theme.current().assets_dir),
-    )
+    let theme_assets = ServeDir::new(&crate::config::get().theme.current().assets_dir);
+    let public = ServeDir::new(&crate::config::get().resource.public_dir);
+
+    Router::new()
+        .scope("/theme/assets/{*}", theme_assets)
+        .scope("/{*}", public)
 }
 
 fn build_download() -> Router {

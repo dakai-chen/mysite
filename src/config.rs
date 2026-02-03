@@ -176,10 +176,12 @@ pub struct DatabasePoolConfig {
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ResourceConfig {
     /// 上传文件的存储目录
-    pub uploads_dir: String,
+    pub upload_dir: String,
     /// 上传文件的大小限制
     #[serde(with = "crate::util::serde::human_size")]
-    pub uploads_file_max_size: u64,
+    pub upload_file_max_size: u64,
+    /// 公开文件的存储目录
+    pub public_dir: String,
 }
 
 /// 管理员配置
