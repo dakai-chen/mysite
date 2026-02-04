@@ -24,13 +24,13 @@ pub struct TemplateEngine {
 }
 
 impl TemplateEngine {
-    pub fn raw_render(&self, template_name: &str) -> anyhow::Result<String> {
+    pub fn render(&self, template_name: &str) -> anyhow::Result<String> {
         self.tera
             .render(template_name, &Context::default())
             .map_err(Into::into)
     }
 
-    pub fn raw_render_with<T>(&self, template_name: &str, context: &T) -> anyhow::Result<String>
+    pub fn render_with<T>(&self, template_name: &str, context: &T) -> anyhow::Result<String>
     where
         T: Serialize,
     {
@@ -39,10 +39,10 @@ impl TemplateEngine {
             .map_err(Into::into)
     }
 
-    pub fn render<T>(&self, data: &PageContext<T>) -> anyhow::Result<String>
+    pub fn typed_render<T>(&self, data: &PageContext<T>) -> anyhow::Result<String>
     where
         T: TemplateRenderData,
     {
-        self.raw_render_with(T::template_name(), data)
+        self.render_with(T::template_name(), data)
     }
 }

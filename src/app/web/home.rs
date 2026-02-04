@@ -15,5 +15,5 @@ pub async fn home(
     Extension(state): Extension<Arc<AppState>>,
 ) -> Result<impl IntoResponse, BoxError> {
     let context = PageContext::new(HomeVo).admin(admin.map(Into::into));
-    Ok(Html(state.template.render(&context)))
+    Ok(Html(state.template.typed_render(&context)))
 }

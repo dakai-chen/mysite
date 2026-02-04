@@ -34,7 +34,7 @@ pub async fn list(
             .await?;
     let vo = ArticleListVo::from(list, params)?;
     let context = PageContext::new(vo).admin(admin.map(Into::into));
-    Ok(Html(state.template.render(&context)))
+    Ok(Html(state.template.typed_render(&context)))
 }
 
 #[boluo::route("/articles/{article_id}", method = ["GET"])]
@@ -54,7 +54,7 @@ pub async fn detail(
     };
     let vo = ArticleDetailsVo::from(article);
     let context = PageContext::new(vo).admin(admin.map(Into::into));
-    Ok(Html(state.template.render(&context)))
+    Ok(Html(state.template.typed_render(&context)))
 }
 
 #[boluo::route("/articles/{article_id}/_unlock", method = ["POST"])]
@@ -75,7 +75,7 @@ pub async fn create(
     Extension(state): Extension<Arc<AppState>>,
 ) -> Result<impl IntoResponse, BoxError> {
     let context = PageContext::new(CreateArticleVo).admin(admin);
-    Ok(Html(state.template.render(&context)))
+    Ok(Html(state.template.typed_render(&context)))
 }
 
 #[boluo::route("/articles/_create", method = ["POST"])]
@@ -106,7 +106,7 @@ pub async fn update(
     };
     let vo = UpdateArticleVo::try_from(article)?;
     let context = PageContext::new(vo).admin(admin);
-    Ok(Html(state.template.render(&context)))
+    Ok(Html(state.template.typed_render(&context)))
 }
 
 #[boluo::route("/articles/{article_id}/_update", method = ["POST"])]

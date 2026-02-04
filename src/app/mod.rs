@@ -122,19 +122,19 @@ async fn error_to_status_code(
             title: article.title,
         };
         let context = PageContext::new(vo);
-        return Html(state.template.render(&context)).into_response();
+        return Html(state.template.typed_render(&context)).into_response();
     }
 
     let html = match app_error.meta().status_code() {
         StatusCode::NOT_FOUND => state
             .template
-            .render(&PageContext::new(Err404Vo::from(&app_error))),
+            .typed_render(&PageContext::new(Err404Vo::from(&app_error))),
         StatusCode::METHOD_NOT_ALLOWED => state
             .template
-            .render(&PageContext::new(Err405Vo::from(&app_error))),
+            .typed_render(&PageContext::new(Err405Vo::from(&app_error))),
         _ => state
             .template
-            .render(&PageContext::new(ErrOtherVo::from(&app_error))),
+            .typed_render(&PageContext::new(ErrOtherVo::from(&app_error))),
     };
     (app_error.meta().status_code(), Html(html)).into_response()
 }

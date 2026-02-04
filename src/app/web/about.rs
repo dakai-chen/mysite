@@ -33,10 +33,10 @@ pub async fn about(
         };
         let vo = AboutVo::from(article);
         let context = PageContext::new(vo).admin(admin.map(Into::into));
-        Ok(Html(state.template.render(&context)))
+        Ok(Html(state.template.typed_render(&context)))
     } else {
         let vo = AboutVo::default();
         let context = PageContext::new(vo).admin(admin.map(Into::into));
-        Ok(Html(state.template.render(&context)))
+        Ok(Html(state.template.typed_render(&context)))
     }
 }

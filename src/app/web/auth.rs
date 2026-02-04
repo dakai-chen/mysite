@@ -20,7 +20,7 @@ pub async fn login(
         return Ok(Redirect::to("/")?.into_response()?);
     }
     let context = PageContext::new(AdminLoginVo).admin(admin.map(Into::into));
-    Ok(Html(state.template.render(&context)).into_response()?)
+    Ok(Html(state.template.typed_render(&context)).into_response()?)
 }
 
 #[boluo::route("/login", method = ["POST"])]
@@ -38,7 +38,7 @@ pub async fn logout(
     Extension(state): Extension<Arc<AppState>>,
 ) -> Result<impl IntoResponse, BoxError> {
     let context = PageContext::new(AdminLogoutVo).admin(admin);
-    Ok(Html(state.template.render(&context)))
+    Ok(Html(state.template.typed_render(&context)))
 }
 
 #[boluo::route("/logout", method = ["POST"])]
