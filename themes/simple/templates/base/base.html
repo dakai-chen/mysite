@@ -9,11 +9,7 @@
     {% else %}
     <link rel="icon" href="/theme/assets/image/favicon.ico">
     {% endif %}
-    {% if config.theme.extensions.title is defined %}
     <title>{% block title %}{{ config.theme.extensions.title }}{% endblock title %}</title>
-    {% else %}
-    <title>{% block title %}{{ "个人博客" }}{% endblock title %}</title>
-    {% endif %}
     <!-- 样式 -->
     <link href="/theme/assets/styles/blog-var.css" rel="stylesheet">
     <link href="/theme/assets/styles/blog-font.css" rel="stylesheet">
@@ -28,11 +24,7 @@
         <header>
             <!-- LOGO -->
             <div class="logo">
-                {% if config.theme.extensions.title is defined %}
                 <h1>{{ config.theme.extensions.title }}</h1>
-                {% else %}
-                <h1>{{ "个人博客" }}</h1>
-                {% endif %}
             </div>
             <!-- 工具栏 -->
             <div class="toolbar">
@@ -44,6 +36,7 @@
                 </nav>
                 <!-- 菜单 -->
                 <ul class="menu">
+                    <li><a href="/rss">RSS</a></li>
                     {% block menu %}{% endblock menu %}
                 </ul>
             </div>

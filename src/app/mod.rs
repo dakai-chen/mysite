@@ -58,6 +58,7 @@ fn build_download() -> Router {
 
 fn build_web() -> Router {
     Router::new()
+        .mount(web::rss::rss)
         .mount(web::home::home)
         .mount(web::about::about)
         .mount(web::article::list)

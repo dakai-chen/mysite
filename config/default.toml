@@ -159,3 +159,16 @@ excerpt_max_size = "150"
 content_max_size = "2MiB"
 # 作为 About 页面的文章
 # about_article_id = ""
+
+# ------------------------------------------------------------------------------
+# simple 主题自定义配置
+# ------------------------------------------------------------------------------
+[theme.extensions]
+# 网站标题
+title = "个人博客"
+# RSS 源的基础地址
+rss_base_url = ""
+# RSS 源的描述
+rss_description = ""
+# 欢迎图片
+welcome_img = "/theme/assets/image/welcome.png"

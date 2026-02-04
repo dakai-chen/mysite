@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+    <title>{{ config.theme.extensions.title }}</title>
+    <link>{{ config.theme.extensions.rss_base_url }}</link>
+    <description>{{ config.theme.extensions.rss_description }}</description>
+    {% for article in context.items %}
+    <item>
+        <title>{{ article.title }}</title>
+        <link>{{ config.theme.extensions.rss_base_url }}/articles/{{ article.article_id }}</link>
+        <pubDate>{{ article.published_at | date(format="%a, %d %b %Y %H:%M:%S GMT", timezone="UTC") }}</pubDate>
+    </item>
+    {% endfor %}
+</channel>
+</rss>
