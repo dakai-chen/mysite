@@ -10,7 +10,7 @@ use crate::template::render::{PageContext, TemplateRenderData};
 pub fn build_template(config: &ThemeConfig) -> anyhow::Result<TemplateEngine> {
     let mut tera = Tera::new(
         &crate::util::path::root(&config.current().templates_dir)
-            .join("**/*.html")
+            .join("**/*")
             .into_string(),
     )?;
 
