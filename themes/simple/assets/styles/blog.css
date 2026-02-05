@@ -437,6 +437,8 @@ a.btn:active {
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: var(--blog-border-size) solid black;
 }
 
 .article .article-title {
