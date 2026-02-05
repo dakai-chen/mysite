@@ -402,7 +402,6 @@ a.btn:active {
 
 .article-list>li {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
 }
 
