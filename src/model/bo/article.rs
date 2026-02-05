@@ -92,6 +92,10 @@ pub struct ArticleListItemBo {
     pub article_id: String,
     /// 标题
     pub title: String,
+    /// 摘要
+    pub excerpt: String,
+    /// 存储 Markdown 格式的正文
+    pub markdown_content: String,
     /// 状态
     pub status: ArticleStatus,
     /// 创建时间
@@ -109,6 +113,8 @@ impl From<ArticlePo> for ArticleListItemBo {
         Self {
             article_id: article.id,
             title: article.title,
+            excerpt: article.excerpt,
+            markdown_content: article.markdown_content,
             status: article.status,
             created_at: article.created_at,
             updated_at: article.updated_at,

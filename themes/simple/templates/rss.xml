@@ -8,6 +8,13 @@
     <item>
         <title>{{ article.title }}</title>
         <link>{{ config.theme.extensions.rss_base_url }}/articles/{{ article.article_id }}</link>
+        <description>
+        {% if not article.need_password %}
+        {{ article.markdown_content | markdown_to_html }}
+        {% else %}
+        {{ "🔒 文章内容需要解锁查看" }}
+        {% endif %}
+        </description>
         <pubDate>{{ article.published_at | date(format="%a, %d %b %Y %H:%M:%S GMT", timezone="UTC") }}</pubDate>
     </item>
     {% endfor %}

@@ -1,14 +1,50 @@
 use serde::Serialize;
 
-use crate::model::bo::article::ArticleListBo;
-use crate::model::vo::article::ArticleListItemVo;
+use crate::model::bo::article::{ArticleListBo, ArticleListItemBo};
+use crate::model::common::article::ArticleStatus;
 use crate::template::render::TemplateRenderData;
+
+/// 文章列表项
+#[derive(Debug, Clone, Serialize)]
+pub struct RssListItemVo {
+    /// 文章ID
+    pub article_id: String,
+    /// 标题
+    pub title: String,
+    /// 存储 Markdown 格式的正文
+    pub markdown_content: String,
+    /// 状态
+    pub status: ArticleStatus,
+    /// 创建时间
+    pub created_at: i64,
+    /// 修改时间
+    pub updated_at: i64,
+    /// 发布时间
+    pub published_at: Option<i64>,
+    /// 是否需要密码访问
+    pub need_password: bool,
+}
+
+impl From<ArticleListItemBo> for RssListItemVo {
+    fn from(value: ArticleListItemBo) -> Self {
+        Self {
+            article_id: value.article_id,
+            title: value.title,
+            markdown_content: value.markdown_content,
+            status: value.status,
+            created_at: value.created_at,
+            updated_at: value.updated_at,
+            published_at: value.published_at,
+            need_password: value.need_password,
+        }
+    }
+}
 
 /// RSS 页面
 #[derive(Debug, Clone, Serialize)]
 pub struct RssVo {
     /// 文章列表数据
-    pub items: Vec<ArticleListItemVo>,
+    pub items: Vec<RssListItemVo>,
 }
 
 impl From<ArticleListBo> for RssVo {
@@ -18,7 +54,7 @@ impl From<ArticleListBo> for RssVo {
                 .data
                 .items
                 .into_iter()
-                .map(ArticleListItemVo::from)
+                .map(RssListItemVo::from)
                 .collect(),
         }
     }
