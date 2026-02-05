@@ -39,8 +39,8 @@ max_keep_files = 7
 default_limit = "2MiB"
 # 自定义请求体大小限制规则列表
 rules = [
-    { path = "/resource/upload", method = "POST", limit = "200MiB" },
-    { path = "/article/upload_attachment", method = "POST", limit = "200MiB" },
+    { path = "/resource/upload", method = "POST", limit = "2GiB" },
+    { path = "/article/upload_attachment", method = "POST", limit = "2GiB" },
 ]
 
 # ------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ max_lifetime = "30m"
 # 上传文件的存储目录
 upload_dir = "data/upload"
 # 上传文件的大小限制
-upload_file_max_size = "200MiB"
+upload_file_max_size = "2GiB"
 # 公开文件的存储目录
 public_dir = "data/public"
 
@@ -152,9 +152,9 @@ access_access_ttl = "1h"
 # 全文搜索匹配结果最大输出条目
 full_text_search_limit = 100
 # 文章标题最大长度限制
-title_max_size = "80"
+title_max_size = "120"
 # 文章摘要最大长度限制
-excerpt_max_size = "150"
+excerpt_max_size = "600"
 # 文章正文最大长度限制
 content_max_size = "2MiB"
 # 作为 About 页面的文章
