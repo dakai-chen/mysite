@@ -106,5 +106,7 @@
         let status = event.target.dataset.status;
         api_article_update_status(id, status, () => { window.location.reload() });
     }
+
+    document.addEventListener('DOMContentLoaded', init_code_copy_btn);
 </script>
 {% endblock scripts %}

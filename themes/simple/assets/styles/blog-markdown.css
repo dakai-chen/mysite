@@ -200,7 +200,7 @@
     background-color: #dcdcdc;
 }
 
-.markdown pre code {
+.markdown pre>code {
     display: block;
     padding: 0.375rem 0.75rem;
     overflow-x: auto;
@@ -232,4 +232,36 @@
 
 .markdown dd {
     padding: 0 1.5rem;
+}
+
+/*******************************************************************************
+ * 代码块添加复制按钮
+ ******************************************************************************/
+
+.markdown pre {
+    position: relative;
+}
+
+.markdown pre .code-copy-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background-color: #36CFC9;
+    color: #fff;
+    font-size: 0.75rem;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.2s ease;
+    display: none;
+    z-index: 10;
+}
+
+.markdown pre .code-copy-btn:hover {
+    background-color: #20B2AA;
+}
+
+.markdown pre:hover .code-copy-btn {
+    display: inline-block;
 }

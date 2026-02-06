@@ -33,3 +33,9 @@
 </div>
 {% endif %}
 {% endblock main %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', init_code_copy_btn);
+</script>
+{% endblock scripts %}
