@@ -4,11 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% if config.theme.extensions.favicon is defined %}
-    <link rel="icon" href="{{ config.theme.extensions.favicon }}">
-    {% else %}
-    <link rel="icon" href="/theme/assets/image/favicon.ico">
-    {% endif %}
+    <link rel="icon" href="{{ config.theme.extensions.favicon_ico }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ config.theme.extensions.title }} - 订阅" href="https://{{ config.theme.extensions.base_url }}/rss">
     <title>{% block title %}{{ config.theme.extensions.title }}{% endblock title %}</title>
     <!-- 样式 -->
     <link href="/theme/assets/styles/blog-var.css" rel="stylesheet">

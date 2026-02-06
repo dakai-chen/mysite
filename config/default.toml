@@ -166,9 +166,11 @@ content_max_size = "2MiB"
 [theme.extensions]
 # 网站标题
 title = "个人博客"
-# RSS 源的基础地址
-rss_base_url = ""
+# 网站的基础网址
+base_url = ""
+# 首页图片
+home_img = "/theme/assets/image/home.png"
+# 网站图标
+favicon_ico = "/theme/assets/image/favicon.ico"
 # RSS 源的描述
 rss_description = ""
-# 欢迎图片
-welcome_img = "/theme/assets/image/welcome.png"
