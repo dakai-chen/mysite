@@ -13,6 +13,7 @@ use boluo::route::Router;
 use boluo::service::{Service, ServiceExt};
 use boluo::static_file::ServeDir;
 
+use crate::context::auth::AdminCleanCookie;
 use crate::error::AppErrorMeta;
 use crate::middleware::error::OrElseWith;
 use crate::middleware::limit::BodyLimit;
@@ -124,6 +125,15 @@ async fn error_to_status_code(
         };
         let context = PageContext::new(vo);
         return Html(state.template.typed_render(&context)).into_response();
+    }
+
+    if let AppErrorMeta::AdminAccessTokenExpired
+    | AppErrorMeta::AdminAccessTokenNotEffective
+    | AppErrorMeta::AdminAccessTokenInvalid = app_error.meta()
+    {
+        let context = PageContext::new(ErrOtherVo::from(&app_error));
+        let html = state.template.typed_render(&context);
+        return (app_error.meta().status_code(), AdminCleanCookie, Html(html)).into_response();
     }
 
     let html = match app_error.meta().status_code() {
