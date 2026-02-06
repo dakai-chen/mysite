@@ -188,7 +188,14 @@ pub async fn get_article(
         }
         .into_error());
     }
+
     let attachments = list_attachment(&article.id, db).await?;
+
+    if admin.is_none() {
+        if let Err(e) = update_article_visit_stats(&article, visitor, db).await {
+            tracing::error!("更新文章访问记录信息失败：{e}");
+        }
+    }
     let Some(stats) =
         crate::storage::db::article_stats::find_by_article_id(&article.id, db).await?
     else {
@@ -197,11 +204,7 @@ pub async fn get_article(
             article.id
         )));
     };
-    if admin.is_none() {
-        if let Err(e) = update_article_visit_stats(&article, visitor, db).await {
-            tracing::error!("更新文章访问记录信息失败：{e}");
-        }
-    }
+
     if admin.is_some() {
         let details = AdminArticleDetailsBo::from_entities(article, attachments, stats);
         Ok(Some(ArticleDetailsBo::from(details)))
