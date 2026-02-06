@@ -244,13 +244,13 @@
 
 .markdown pre .code-copy-btn {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 0.3125rem;
+    right: 0.5rem;
     padding: 0.25rem 0.5rem;
     border: none;
-    background-color: #36CFC9;
+    background-color: #54B4E8;
     color: #fff;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     cursor: pointer;
     outline: none;
     transition: background-color 0.2s ease;
@@ -259,7 +259,7 @@
 }
 
 .markdown pre .code-copy-btn:hover {
-    background-color: #20B2AA;
+    background-color: #389CD8;
 }
 
 .markdown pre:hover .code-copy-btn {
