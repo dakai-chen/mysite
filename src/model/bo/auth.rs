@@ -14,6 +14,8 @@ pub struct AdminBo {
 
 #[derive(Debug)]
 pub struct AdminLoginBo<'a> {
+    /// 登录密码
+    pub password: Cow<'a, str>,
     /// TOTP 动态口令
     pub totp_code: Cow<'a, str>,
 }

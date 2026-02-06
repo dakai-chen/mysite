@@ -107,6 +107,8 @@ public_dir = "data/public"
 # 管理员配置
 # ------------------------------------------------------------------------------
 [admin]
+# 登录密码
+password = "123456"
 # TOTP 工具导入链接（OTPAuth URL格式，用于生成二维码供扫码绑定）
 totp_url = "otpauth://totp/admin?secret=PRF5QLSBAI7E75OTRSFBPELL3E"
 # 会话有效期

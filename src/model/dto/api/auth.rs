@@ -4,6 +4,8 @@ use crate::model::bo::auth::{AdminAccessTokenBo, AdminLoginBo};
 
 #[derive(Debug, Deserialize)]
 pub struct AdminLoginDto {
+    /// 登录密码
+    pub password: String,
     /// TOTP 动态口令
     pub totp_code: String,
 }
@@ -11,6 +13,7 @@ pub struct AdminLoginDto {
 impl<'a> Into<AdminLoginBo<'a>> for AdminLoginDto {
     fn into(self) -> AdminLoginBo<'a> {
         AdminLoginBo {
+            password: self.password.into(),
             totp_code: self.totp_code.into(),
         }
     }

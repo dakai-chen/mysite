@@ -8,6 +8,10 @@
 {% block main %}
 <form class="form" action="/login" method="POST">
     <div class="form-input-group">
+        <label>密码</label>
+        <input type="password" name="password" autocomplete="off">
+    </div>
+    <div class="form-input-group">
         <label>口令</label>
         <input type="text" name="totp_code" autocomplete="off">
     </div>

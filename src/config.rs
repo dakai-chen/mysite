@@ -187,6 +187,8 @@ pub struct ResourceConfig {
 /// 管理员配置
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct AdminConfig {
+    /// 登录密码
+    pub password: String,
     /// TOTP 工具导入链接（OTPAuth URL格式，用于生成二维码供扫码绑定）
     pub totp_url: String,
     /// 会话有效期

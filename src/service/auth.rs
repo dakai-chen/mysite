@@ -12,8 +12,11 @@ static ADMIN_TOTP: LazyLock<TOTP> =
 
 /// 管理员登录认证
 pub async fn login(bo: &AdminLoginBo<'_>) -> Result<AdminAccessTokenBo, AppError> {
+    if crate::config::get().admin.password != bo.password {
+        return Err(AppErrorMeta::BadRequest.with_message("密码或口令错误"));
+    }
     if ADMIN_TOTP.generate_current()? != bo.totp_code {
-        return Err(AppErrorMeta::BadRequest.with_message("口令错误"));
+        return Err(AppErrorMeta::BadRequest.with_message("密码或口令错误"));
     }
     AdminAccessTokenBo::generate()
 }
